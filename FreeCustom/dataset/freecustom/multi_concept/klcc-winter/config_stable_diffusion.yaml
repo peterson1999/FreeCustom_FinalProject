@@ -1,0 +1,24 @@
+mark: ""
+
+model_path: "stable-diffusion-v1-5/stable-diffusion-v1-5"
+
+gpu: 0
+
+# feature injection setting
+start_step: 0
+end_step: 50
+layer_idx: [ 10, 11, 12, 13, 14, 15 ]
+
+# set seeds
+seeds: [ 64, 128, 512, 4096, 65536 ]
+
+# set reference image infos
+ref_image_infos: { dataset/freecustom/multi_concept/klcc-winter/image/klcc.jpg: Kuala Lumpur Twin Towers, dataset/freecustom/multi_concept/klcc-winter/image/beijing-winter.jpg: A scenery of winter in Beijing }
+target_prompt: "KLCC in winter scenery"
+
+# ref image setting
+use_null_ref_prompts: False # Whether or not to use an empty prompt when denoising reference images.
+mask_weights: [ 3.0, 3.0 ] # The larger the mask_weight is, the higher attention is for the reference image.
+
+negative_prompt: "lowres, bad anatomy, text, error, cropped, worst quality, low quality, normal quality, jpeg artifacts, blurry"
+style_fidelity: 1 # The larger the style_fidelity, the more like the reference concepts, range of values: [0,1]
