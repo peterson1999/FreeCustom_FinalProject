@@ -98,6 +98,7 @@ if __name__ == "__main__":
                                 ref_masks      = ref_masks,
                                 mask_weights   =  dynamic_weights,
                                 style_fidelity = cfg.style_fidelity,
+                                use_cosine_scheduler = cfg.use_cosine_scheduler,
                                 viz_cfg        = viz_cfg)
         hack_self_attention_to_mrsa(model, mrsa)
 
