@@ -22,3 +22,4 @@ mask_weights: [ 3.0, 3.0, 3.5 ] # The larger the mask_weight is, the higher atte
 
 negative_prompt: "lowres, bad anatomy, text, error, cropped, worst quality, low quality, normal quality, jpeg artifacts, blurry"
 style_fidelity: 1 # The larger the style_fidelity, the more like the reference concepts, range of values: [0,1]
+use_cosine_scheduler: False
