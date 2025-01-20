@@ -1,3 +1,6 @@
 **__pycache__
 **.DS_Store
 .python-version
+results/*
+FreeCustom/README.md
+StyleTransferFreeCustom/README.md
