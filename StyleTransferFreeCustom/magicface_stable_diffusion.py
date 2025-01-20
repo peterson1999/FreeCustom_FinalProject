@@ -122,7 +122,7 @@ if __name__ == "__main__":
                     result_dir = results_dir,
                     viz_cfg = viz_cfg,
                     ).images[0]
-        images.save(os.path.join(results_dir, f"magicface{i}_{seed}.png"))
+        images.save(os.path.join(results_dir, f"magicface{id}_{seed}.png"))
         
         # concat input images and generated image
         out_image = torch.cat([ref_image * 0.5 + 0.5 for ref_image in ref_images] + [ToTensor()(images).to(device).unsqueeze(0)], dim=0)
