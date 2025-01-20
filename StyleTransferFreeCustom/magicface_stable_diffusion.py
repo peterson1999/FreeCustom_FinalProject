@@ -126,4 +126,4 @@ if __name__ == "__main__":
         
         # concat input images and generated image
         out_image = torch.cat([ref_image * 0.5 + 0.5 for ref_image in ref_images] + [ToTensor()(images).to(device).unsqueeze(0)], dim=0)
-        save_image(out_image, os.path.join(results_dir, f"all_{i}_{seed}.png"))
+        save_image(out_image, os.path.join(results_dir, f"all_{id}_{seed}.png"))
