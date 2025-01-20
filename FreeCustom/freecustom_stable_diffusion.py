@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # load config
     # config = 'single_concept'
     config = 'multi_concept/roger-wanggang'
-    cfg = OmegaConf.load(f"/data/xxq/FreeCustom/dataset/freecustom/multi_concept/Leather_Hat/config_stable_diffusion.yaml")
+    cfg = OmegaConf.load(f"dataset/freecustom/multi_concept/Leather_Hat/config_stable_diffusion.yaml")
     print(f'config: {cfg}')
 
     # set results and log output root directory
