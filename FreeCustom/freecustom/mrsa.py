@@ -8,7 +8,7 @@ import math
 from utils.utils import visualize_correspondence, visualize_attention_map
 
 class MultiReferenceSelfAttention():
-    def __init__(self,  start_step=0, end_step=50, step_idx=None, layer_idx=None, ref_masks=None, mask_weights=[1.0,1.0,1.0], style_fidelity=1, viz_cfg=None):
+    def __init__(self,  start_step=0, end_step=50, step_idx=None, layer_idx=None, ref_masks=None, mask_weights=[1.0,1.0,1.0], style_fidelity=1, use_cosine_scheduler=False, viz_cfg=None):
         """
         Args:
             start_step   : the step to start transforming self-attention to multi-reference self-attention
@@ -34,6 +34,7 @@ class MultiReferenceSelfAttention():
         self.style_fidelity = style_fidelity
 
         self.viz_cfg = viz_cfg
+        self.use_cosine_scheduler = use_cosine_scheduler
        
     def __call__(self, q, k, v, sim, attn, is_cross, place_in_unet, num_heads, **kwargs):
         out = self.mrsa_forward(q, k, v, sim, attn, is_cross, place_in_unet, num_heads, **kwargs)
@@ -84,15 +85,15 @@ class MultiReferenceSelfAttention():
     
     
     
-    def get_main_concept_weight(self,timestep, num_timesteps):
+    def get_main_concept_weight(self,timestep, num_timesteps,weight):
         # Basic cosine schedule (returns values between 0 and 1)
         s = 0.008
         x = timestep / num_timesteps
         cosine_value = np.cos(((x + s)/(1 + s)) * math.pi/2)**2
 
         # Scale and shift to oscillate between 3.0 and 4.0
-        min_weight = 2.8
-        max_weight = 3.2
+        min_weight = weight-0.3
+        max_weight = weight+0.3
         weight_range = max_weight - min_weight
         
         # Convert cosine value to weight
@@ -117,13 +118,16 @@ class MultiReferenceSelfAttention():
             
             concept_scores = []
             for i, (ref_mask, mask_weight) in enumerate(zip(self.ref_masks, self.mask_weights)):
-                '''
-                if i == 0:
+                
+                if self.use_cosine_scheduler and i == 0:
                     print("mask weight: ", mask_weight)
                     index = self.find_division(timestep,total_timestep,3)
-                    print("timestep: ", timestep, " index: ", index, " scheduler: ",self.get_main_concept_weight(timestep,total_timestep),)
-                    ref_mask = self.get_ref_mask(ref_mask, self.get_main_concept_weight(timestep,total_timestep), H, W)
+                    print("timestep: ", timestep, " index: ", index, " scheduler: ",self.get_main_concept_weight(timestep,total_timestep,mask_weight),)
+                    ref_mask = self.get_ref_mask(ref_mask, self.get_main_concept_weight(timestep,total_timestep,mask_weight), H, W)
                     #ref_mask = ref_mask * self.get_weight(index)
+                else:
+                    ref_mask = self.get_ref_mask(ref_mask, mask_weight, H, W)
+                '''
                 else:
                     print("mask weight: ", mask_weight)
                     index = self.find_division(timestep,total_timestep,3)
@@ -131,7 +135,7 @@ class MultiReferenceSelfAttention():
                     ref_mask = self.get_ref_mask(ref_mask, mask_weight * self.get_weight1(index), H, W)
                     #ref_mask = ref_mask * self.get_weight1(index)
                 '''
-                ref_mask = self.get_ref_mask(ref_mask, mask_weight, H, W)
+                
                 sim_ref = sim_refs[..., H*W*i: H*W*(i+1)]
                 sim_ref = sim_ref + ref_mask.masked_fill(ref_mask == 0, torch.finfo(sim.dtype).min)
                 sim_or.append(sim_ref)
