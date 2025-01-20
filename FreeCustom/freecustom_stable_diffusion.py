@@ -129,7 +129,7 @@ if __name__ == "__main__":
                                 ref_masks      = ref_masks,
                                 mask_weights   = cfg.mask_weights,
                                 style_fidelity = cfg.style_fidelity,
-                                use_cosine_scheduler = cfg.use_cosine_scheduler,
+                                use_cosine_scheduler = cfg.get('use_cosine_scheduler', False),
                                 viz_cfg        = viz_cfg)
         
         print("step 0")
