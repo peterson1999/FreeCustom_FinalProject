@@ -25,5 +25,5 @@ python magicface_stable_diffusion.py
 We prepare several test data across various styles in `./dataset` for you to reproduce the results in our paper. 
 
 You only need to replace `./configs/config_stable_diffusion.yaml` with one of configuration files in the `./dataset/` folder,
-
 and run the previous code again
+
