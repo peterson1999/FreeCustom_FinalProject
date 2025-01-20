@@ -22,7 +22,7 @@ if __name__ == "__main__":
     if os.path.exists('mask'):
         shutil.rmtree('mask')
     # load config
-    cfg = OmegaConf.load("/data/xxq/MagicFace2/dataset/cat_hinton_sculpture/config_stable_diffusion.yaml")
+    cfg = OmegaConf.load("dataset/girl_hat_scarf/config_stable_diffusion.yaml")
     print(f'config: {cfg}')
 
     # set results and log output root directory
@@ -31,8 +31,7 @@ if __name__ == "__main__":
     results_dir = os.path.join('results', date, now)
 
     # set device
-    torch.cuda.set_device(cfg.gpu)
-    device = torch.device("cuda:6") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda:5") if torch.cuda.is_available() else torch.device("cpu")
     
     # set model
     scheduler = DDIMScheduler(  beta_start=0.00085, 
@@ -122,8 +121,8 @@ if __name__ == "__main__":
                     result_dir = results_dir,
                     viz_cfg = viz_cfg,
                     ).images[0]
-        images.save(os.path.join(results_dir, f"magicface{id}_{seed}.png"))
+        images.save(os.path.join(results_dir, f"magicface_{seed}.png"))
         
         # concat input images and generated image
         out_image = torch.cat([ref_image * 0.5 + 0.5 for ref_image in ref_images] + [ToTensor()(images).to(device).unsqueeze(0)], dim=0)
-        save_image(out_image, os.path.join(results_dir, f"all_{id}_{seed}.png"))
+        save_image(out_image, os.path.join(results_dir, f"all_{seed}.png"))
