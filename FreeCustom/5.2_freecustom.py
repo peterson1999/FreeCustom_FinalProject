@@ -13,7 +13,7 @@ from pipelines.pipeline_stable_diffusion_freecustom import StableDiffusionFreeCu
 from freecustom.mrsa import MultiReferenceSelfAttention
 from freecustom.hack_attention import hack_self_attention_to_mrsa
 
-from FreeCustom_FinalProject.FreeCustom.utils.dynamic_mask import dynamic_mask_weights
+from utils.dynamic_mask import dynamic_mask_weights
 
 if __name__ == "__main__":
     sys.path.append(os.getcwd())
@@ -90,7 +90,6 @@ if __name__ == "__main__":
     for seed in cfg.seeds:
         seed_everything(seed)
         dynamic_weights = dynamic_mask_weights(ref_masks,cfg.mask_weights)
-        print(dynamic_weights)
         # hack the attention module
         mrsa = MultiReferenceSelfAttention(
                                 start_step     = cfg.start_step,

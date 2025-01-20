@@ -30,11 +30,6 @@ def compute_mask_shape_features(mask) :
 
     relative_area_ratio = area / (h * w) if (h * w) > 0 else 0.0
     perimeter_to_area_ratio = perimeter / area if area > 1e-6 else 0.0
-
-    print(f"solidity: {solidity}")
-    print(f"relative_area_ratio: {relative_area_ratio}")
-    print(f" perimeter_to_area_ratio: { perimeter_to_area_ratio}")
-
     return  solidity, relative_area_ratio, perimeter_to_area_ratio
 
 
